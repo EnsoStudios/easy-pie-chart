@@ -19,7 +19,7 @@
     // like Node.
     module.exports = factory(require("angular"));
   } else {
-    factory(angular);
+    factory(root["angular"]);
   }
 }(this, function (angular) {
 
@@ -47,6 +47,7 @@
 					 */
 					var options = {
 						barColor: '#ef1e25',
+						backgroundColor: false,
 						trackColor: '#f9f9f9',
 						scaleColor: '#dfe0e0',
 						scaleLength: 5,
@@ -71,7 +72,6 @@
 		}]);
 
 })(angular);
-
 /**
  * Renderer to render the chart on a canvas object
  * @param {DOMElement} el      DOM element to host the canvas (root of the plugin)
@@ -118,22 +118,31 @@ var CanvasRenderer = function(el, options) {
 
 	/**
 	 * Draw a circle around the center of the canvas
-	 * @param {strong} color     Valid CSS color string
-	 * @param {number} lineWidth Width of the line in px
-	 * @param {number} percent   Percentage to draw (float between -1 and 1)
+	 * @param {strong} barColor        Valid CSS color string for bar
+	 * @param {strong} backgroundColor Valid CSS color string for background
+	 * @param {number} lineWidth       Width of the line in pixels
+	 * @param {number} percent         Percentage to draw
 	 */
-	var drawCircle = function(color, lineWidth, percent) {
-		percent = Math.min(Math.max(-1, percent || 0), 1);
-		var isNegative = percent <= 0 ? true : false;
+	 var drawCircle = function(barColor, backgroundColor, lineWidth, percent) {
+		 decimal = Math.min(Math.max(-1, percent/100 || 0), 1);
+		 var isNegative = decimal <= 0 ? true : false;
 
-		ctx.beginPath();
-		ctx.arc(0, 0, radius, 0, Math.PI * 2 * percent, isNegative);
+		 ctx.beginPath();
+		 ctx.arc(0, 0, radius, 0, Math.PI * 2 * decimal, isNegative);
 
-		ctx.strokeStyle = color;
-		ctx.lineWidth = lineWidth;
+		 if (backgroundColor) {
+			 ctx.fillStyle = backgroundColor;
+			 ctx.fill();
+		 }
 
-		ctx.stroke();
-	};
+		 if (barColor && lineWidth) {
+			 ctx.strokeStyle = barColor;
+			 ctx.lineWidth = lineWidth;
+			 ctx.stroke();
+		 }
+
+		 ctx.closePath();
+	 };
 
 	/**
 	 * Draw the scale of the chart
@@ -174,11 +183,12 @@ var CanvasRenderer = function(el, options) {
 	}());
 
 	/**
-	 * Draw the background of the plugin including the scale and the track
+	 * Draw the extras of the plugin, including the background, scale and track
 	 */
-	var drawBackground = function() {
+	var drawExtras = function() {
+		if(options.backgroundColor) drawCircle(options.backgroundColor, options.backgroundColor, options.trackWidth || options.lineWidth, 100);
 		if(options.scaleColor) drawScale();
-		if(options.trackColor) drawCircle(options.trackColor, options.trackWidth || options.lineWidth, 1);
+		if(options.trackColor) drawCircle(options.trackColor, false, options.trackWidth || options.lineWidth, 100);
 	};
 
   /**
@@ -207,19 +217,19 @@ var CanvasRenderer = function(el, options) {
 	 * @param {number} percent Percent shown by the chart between -100 and 100
 	 */
 	this.draw = function(percent) {
-		// do we need to render a background
-		if (!!options.scaleColor || !!options.trackColor) {
+		// do we need to render extras
+		if (!!options.scaleColor || !!options.trackColor || !!options.backgroundColor) {
 			// getImageData and putImageData are supported
 			if (ctx.getImageData && ctx.putImageData) {
 				if (!cachedBackground) {
-					drawBackground();
+					drawExtras();
 					cachedBackground = ctx.getImageData(0, 0, options.size * scaleBy, options.size * scaleBy);
 				} else {
 					ctx.putImageData(cachedBackground, 0, 0);
 				}
 			} else {
 				this.clear();
-				drawBackground();
+				drawExtras();
 			}
 		} else {
 			this.clear();
@@ -236,7 +246,7 @@ var CanvasRenderer = function(el, options) {
 		}
 
 		// draw bar
-		drawCircle(color, options.lineWidth, percent / 100);
+		drawCircle(color, false, options.lineWidth, percent);
 	}.bind(this);
 
 	/**
@@ -262,10 +272,10 @@ var CanvasRenderer = function(el, options) {
 		reqAnimationFrame(animation);
 	}.bind(this);
 };
-
 var EasyPieChart = function(el, opts) {
 	var defaultOptions = {
 		barColor: '#ef1e25',
+		backgroundColor: false,
 		trackColor: '#f9f9f9',
 		scaleColor: '#dfe0e0',
 		scaleLength: 5,
@@ -397,6 +407,5 @@ var EasyPieChart = function(el, opts) {
 
 	init();
 };
-
 
 }));
