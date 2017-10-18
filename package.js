@@ -1,8 +1,8 @@
 Package.describe({
-	name: 'rendro:easy-pie-chart',
-	version: '2.1.7',
+	name: 'enso:enso-easy-pie-chart',
+	version: '2.2',
 	summary: 'Meteor package for jQuery easyPieChart plugin!',
-	git: 'https://github.com/dotansimha/easy-pie-chart.git',
+	git: 'https://github.com/EnsoStudios/easy-pie-chart.git',
 	documentation: null
 });
 

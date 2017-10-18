@@ -1,5 +1,5 @@
 {
-  "name": "easy-pie-chart",
+  "name": "enso-easy-pie-chart",
   "description": "Lightweight plugin to render simple, animated and retina optimized pie charts",
   "keywords": [
     "pie chart",
@@ -18,7 +18,7 @@
       "url": "http://www.opensource.org/licenses/gpl-license.php"
     }
   ],
-  "version": "2.1.7",
+  "version": "2.2",
   "main": "dist/easypiechart.js",
   "author": {
     "name": "Robert Fleischmann",
@@ -34,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rendro/easy-pie-chart.git"
+    "url": "https://github.com/EnsoStudios/easy-pie-chart"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

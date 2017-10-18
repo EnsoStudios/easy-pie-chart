@@ -1,5 +1,5 @@
 {
-  "name": "jquery.easy-pie-chart",
+  "name": "jquery.enso-easy-pie-chart",
   "version": "2.2",
   "main": [
     "dist/jquery.easypiechart.js"
