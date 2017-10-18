@@ -1,10 +1,10 @@
 /**!
- * easy-pie-chart
+ * enso-easy-pie-chart
  * Lightweight plugin to render simple, animated and retina optimized pie charts
  *
  * @license 
  * @author Robert Fleischmann <rendro87@gmail.com> (http://robert-fleischmann.de)
- * @version 2.1.7
+ * @version 2.2
  **/
 
 (function (root, factory) {
@@ -48,6 +48,7 @@
 					var options = {
 						barColor: '#ef1e25',
 						backgroundColor: false,
+						innerBackgroundColor: false,
 						trackColor: '#f9f9f9',
 						scaleColor: '#dfe0e0',
 						scaleLength: 5,
@@ -100,6 +101,12 @@ var CanvasRenderer = function(el, options) {
 		ctx.scale(scaleBy, scaleBy);
 	}
 
+	if (options.backgroundColor) {
+		ctx.fillStyle = options.backgroundColor;
+		ctx.fillRect(0,0,canvas.width,canvas.height);
+		ctx.fill();
+	}
+
 	// move 0,0 coordinates to the center
 	ctx.translate(options.size / 2, options.size / 2);
 
@@ -119,19 +126,19 @@ var CanvasRenderer = function(el, options) {
 	/**
 	 * Draw a circle around the center of the canvas
 	 * @param {strong} barColor        Valid CSS color string for bar
-	 * @param {strong} backgroundColor Valid CSS color string for background
+	 * @param {strong} innerBackgroundColor Valid CSS color string for background
 	 * @param {number} lineWidth       Width of the line in pixels
 	 * @param {number} percent         Percentage to draw
 	 */
-	 var drawCircle = function(barColor, backgroundColor, lineWidth, percent) {
+	 var drawCircle = function(barColor, innerBackgroundColor, lineWidth, percent) {
 		 decimal = Math.min(Math.max(-1, percent/100 || 0), 1);
 		 var isNegative = decimal <= 0 ? true : false;
 
 		 ctx.beginPath();
 		 ctx.arc(0, 0, radius, 0, Math.PI * 2 * decimal, isNegative);
 
-		 if (backgroundColor) {
-			 ctx.fillStyle = backgroundColor;
+		 if (innerBackgroundColor) {
+			 ctx.fillStyle = innerBackgroundColor;
 			 ctx.fill();
 		 }
 
@@ -276,6 +283,7 @@ var EasyPieChart = function(el, opts) {
 	var defaultOptions = {
 		barColor: '#ef1e25',
 		backgroundColor: false,
+		innerBackgroundColor: false,
 		trackColor: '#f9f9f9',
 		scaleColor: '#dfe0e0',
 		scaleLength: 5,

@@ -23,6 +23,7 @@
 					var options = {
 						barColor: '#ef1e25',
 						backgroundColor: false,
+						innerBackgroundColor: false,
 						trackColor: '#f9f9f9',
 						scaleColor: '#dfe0e0',
 						scaleLength: 5,
